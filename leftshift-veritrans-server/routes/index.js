@@ -40,7 +40,7 @@ router.post('/notification', apiController.receivePush);
 //   .all(apiController.isTokenValid)
 //   .post(apiController.storeCard)
 //   .get(apiController.getCards);
-router.post('/card', apiController.getCards);
+router.get('/card', apiController.getCards);
 
 /* Delete Card */
 router.post('/card/delete', apiController.isTokenValid, apiController.deleteCard);
