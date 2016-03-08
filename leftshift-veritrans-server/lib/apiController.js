@@ -481,6 +481,10 @@ exports.doCharge = function(req, res, next) {
 
 }
 
+exports.registerCard = function(req, res, next) {
+  res.send(JSON.stringify(req.body));
+}
+
 /**
  * Validate token
  */

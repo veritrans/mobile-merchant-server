@@ -42,6 +42,8 @@ router.post('/notification', apiController.receivePush);
 //   .get(apiController.getCards);
 router.get('/card', apiController.getCards);
 
+router.post('/card/register', apiController.registerCard);
+
 /* Delete Card */
 router.post('/card/delete', apiController.isTokenValid, apiController.deleteCard);
 
