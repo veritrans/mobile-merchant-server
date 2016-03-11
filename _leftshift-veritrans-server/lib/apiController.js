@@ -3,6 +3,9 @@ var hat = require('hat');
 var request = require('request');
 var gcm = require('./gcm').GCM;
 var _ = require('lodash');
+var crypto = require('crypto');
+var NodeCache = require( "node-cache" );
+var myCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 });
 
 exports.storePurchase = function(req, res, next) {
   var body = req.body;
@@ -330,22 +333,7 @@ exports.storeCard = function(req, res, next) {
   });
 };
 
-exports.getCards = function(req, res, next) {
-  var response = '{"error":"error message","message":"response message","cards":[{"cardNumber":"4111111111111111","cardCvv":123,"cardExpiryMonth":12,"cardExpiryYear":20,"grossAmount":120000}]}'
-  res.send(response);
-  // var token = req.store.token;
-  //
-  // db.cards.find({
-  //   token: token
-  // }).toArray(function(err, cards) {
-  //   if(err) {
-  //     return next(err);
-  //   }
-  //
-  //   req.store.data = {cards: cards} || {cards: []};
-  //   next();
-  // });
-};
+
 
 exports.deleteCard = function(req, res, next) {
   var token = req.store.token;
@@ -481,10 +469,91 @@ exports.doCharge = function(req, res, next) {
 
 }
 
-exports.registerCard = function(req, res, next) {
-  res.send(JSON.stringify(req.body));
+exports.registerCard = function(req, res) {
+//   {
+//   "status_code": "200",
+//   "transaction_id": "4b62f405-34c2-4574-87fd-18731b8d4ce8",
+//   "saved_token_id": "411111dae1ff06-cdd6-4ea0-af19-cd04b68ada21",
+//   "masked_card": "411111-1111"
+// }
+  // var token = req.headers['x-auth'];
+  // console.log(req);
+  // if(/*req.body.status_code == 200 &&*/ req.body.saved_token_id && req.body.masked_card && token){
+  //   var cardList = getSavedCards(token);
+  //   var card = {
+  //     'saved_token_id' : req.body.saved_token_id,
+  //     'masked_card' : req.body.masked_card
+  //   }
+  //   if(cardList){
+  //     cardList.push(card);
+  //   }else{
+  //     cardList = [card];
+  //   }
+  //   var success = myCache.set(token, cardList);
+  //
+  //   if(success){
+  //     res.send('{"code": 200,"status": "Success","message": "Sukses bro"}');
+  //   }else{
+  //     res.send('{"code": 500,"status": "Server Error","message": "Internal Server Error"}');
+  //   }
+  // }else{
+  //   if(!token){
+  //     res.send('{"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"}');
+  //   }else{
+  //     res.send('{"code": 400,"status": "Bad Request","message": "status_code dari papi harus 200, harus ada saved_token_id, harus ada masked_card"}');
+  //   }
+  // }
+
+  console.log(req.body);
+  res.send(req.body);
 }
 
+exports.getCards = function(req, res, next) {
+  var token = req.headers['x-auth'];
+  if(token){
+    var cardList = getSavedCards(token);
+    if(!cardList){
+      cardList = [];
+    }
+  }else{
+    res.send('{"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"}');
+  }
+
+  var response = {
+    'code' : 200,
+    'status' : 'success',
+    'data' : cardList
+  }
+  // var response = '{"code":"error message","message":"response message","cards":[{"cardNumber":"4111111111111111","cardCvv":123,"cardExpiryMonth":12,"cardExpiryYear":20,"grossAmount":120000}]}'
+  res.send(JSON.stringify(response));
+  // var token = req.store.token;
+  //
+  // db.cards.find({
+  //   token: token
+  // }).toArray(function(err, cards) {
+  //   if(err) {
+  //     return next(err);
+  //   }
+  //
+  //   req.store.data = {cards: cards} || {cards: []};
+  //   next();
+  // });
+};
+
+exports.getAuth = function(req, res) {
+  var now = new Date();
+  var hash = crypto.createHash('md5').update(now.toUTCString()).digest('hex');
+  response = {'X-Auth': hash}
+  res.send(JSON.stringify(response));
+}
+
+function getSavedCards(token){
+  value = myCache.get( token );
+  if ( value == undefined ){
+    return false;
+  }
+  return value;
+}
 /**
  * Validate token
  */

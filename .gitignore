@@ -1,7 +1,7 @@
 logs/*
 access.log
 !.gitkeep
-sdk-testing-server/node_modules/
+node_modules/*
 tmp
 *.DS_Store
 *.idea

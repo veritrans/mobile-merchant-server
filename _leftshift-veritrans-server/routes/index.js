@@ -54,4 +54,9 @@ router.get('/offers', apiController.offers);
 // router.post('/creditcard', apiController.saveCC);
 // router.get('/creditcard', apiController.getCC);
 
+/* Auth */
+router.post('/auth', apiController.getAuth);
+
+router.post('/coba', function(req,res){console.log(req);res.json(req.body)});
+
 module.exports = router;

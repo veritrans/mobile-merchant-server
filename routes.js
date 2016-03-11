@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var apiController = require('./apiController');
+var apiController = require('./controllers/apiController');
 
 router.post('/charge', apiController.doCharge);
 
