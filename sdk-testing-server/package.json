@@ -1,0 +1,17 @@
+{
+  "name": "sdk-testing-server",
+  "version": "1.0.0",
+  "description": "testing server for veritrans mobile sdk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tirtawr",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "morgan": "^1.7.0",
+    "request": "^2.69.0"
+  }
+}
