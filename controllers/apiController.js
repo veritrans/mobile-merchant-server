@@ -1,7 +1,7 @@
 var request = require('request');
 var crypto = require('crypto');
 var NodeCache = require( "node-cache" );
-var myCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 });
+var myCache = new NodeCache({ stdTTL: 86400, checkperiod: 12000 });
 
 exports.doCharge = function(req, res, next) {
   var reqBody = req.body;
@@ -35,37 +35,51 @@ exports.registerCard = function(req, res) {
 //   "masked_card": "411111-1111"
 // }
   var token = req.headers['x-auth'];
-  console.log(req);
-  if(req.body.status_code == 200 && req.body.saved_token_id && req.body.masked_card && token){
-    var cardList = getSavedCards(token);
-    var card = {
-      'saved_token_id' : req.body.saved_token_id,
-      'masked_card' : req.body.masked_card
-    }
-    if(cardList){
-      var cardAlreadySaved = false;
-      for (var i = 0; i < cardList.length; i++) {
-        if(cardList[i].saved_token_id == card.saved_token_id){
-          cardAlreadySaved = true;
-          break;
-        }
-      }
-      if(!cardAlreadySaved){
-        cardList.push(card);
-      }
-    }else{
-      cardList = [card];
-    }
-    var success = myCache.set(token, cardList);
 
-    if(success){
-      if(!cardAlreadySaved){
-        res.json({"code": 201,"status": "Success","message": "Card is saved"});
+  if(req.body.status_code == 200 && req.body.saved_token_id && req.body.masked_card && token){
+
+    var tokenList = getTokenList();
+    var isTokenValid = false;
+    for (var i = 0; i < tokenList.length; i++) {
+      if(tokenList[i] == token){
+        isTokenValid = true;
+        break;
+      }
+    }
+
+    if(isTokenValid){
+      var cardList = getSavedCards(token);
+      var card = {
+        'saved_token_id' : req.body.saved_token_id,
+        'masked_card' : req.body.masked_card
+      }
+      if(cardList){
+        var cardAlreadySaved = false;
+        for (var i = 0; i < cardList.length; i++) {
+          if(cardList[i].saved_token_id == card.saved_token_id){
+            cardAlreadySaved = true;
+            break;
+          }
+        }
+        if(!cardAlreadySaved){
+          cardList.push(card);
+        }
       }else{
-        res.json({"code": 208,"status": "Success","message": "Card is already saved"});
+        cardList = [card];
+      }
+      var success = myCache.set(token, cardList);
+
+      if(success){
+        if(!cardAlreadySaved){
+          res.json({"code": 201,"status": "Success","message": "Card is saved"});
+        }else{
+          res.json({"code": 208,"status": "Success","message": "Card is already saved"});
+        }
+      }else{
+        res.json({"code": 500,"status": "Server Error","message": "Internal Server Error"});
       }
     }else{
-      res.json({"code": 500,"status": "Server Error","message": "Internal Server Error"});
+      res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
     }
   }else{
     if(!token){
@@ -79,9 +93,23 @@ exports.registerCard = function(req, res) {
 exports.getCards = function(req, res, next) {
   var token = req.headers['x-auth'];
   if(token){
-    var cardList = getSavedCards(token);
-    if(!cardList){
-      cardList = [];
+
+    var tokenList = getTokenList();
+    var isTokenValid = false;
+    for (var i = 0; i < tokenList.length; i++) {
+      if(tokenList[i] == token){
+        isTokenValid = true;
+        break;
+      }
+    }
+
+    if(isTokenValid){
+      var cardList = getSavedCards(token);
+      if(!cardList){
+        cardList = [];
+      }
+    }else{
+      res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
     }
   }else{
     res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
@@ -95,11 +123,35 @@ exports.getCards = function(req, res, next) {
   res.json(response);
 };
 
-exports.getAuth = function(req, res) {
+exports.generateAuth = function(req, res) {
   var now = new Date();
   var hash = crypto.createHash('md5').update(now.toUTCString()).digest('hex');
   response = {'X-Auth': hash}
-  res.json(response);
+
+  var tokenList = getTokenList();
+
+  if(!tokenList){
+    tokenList = [];
+  }
+
+  tokenList.push(hash);
+
+  var success = myCache.set('tokenList', tokenList);
+
+  if(success){
+    res.json(response);
+  }else{
+    res.json({"code": 500,"status": "Server Error","message": "Internal Server Error"});
+  }
+
+}
+
+function getTokenList(){
+  value = myCache.get( 'tokenList' );
+  if ( value == undefined ){
+    return false;
+  }
+  return value;
 }
 
 function getSavedCards(token){
