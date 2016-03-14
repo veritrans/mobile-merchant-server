@@ -21,7 +21,8 @@ exports.doCharge = function(req, res, next) {
     },
     body: JSON.stringify(reqBody)
   }, function(err, response, body) {
-    res.json(body);
+    var respObj = parseJson(body);
+    res.json(respObj);
   });
 
 }
@@ -115,6 +116,16 @@ function getSavedCards(token){
     return false;
   }
   return value;
+}
+
+function parseJson(jsonString){
+   var retObj = {}
+   try {
+       retObj = JSON.parse(jsonString);
+   } catch (e) {
+       return false;
+   }
+   return retObj;
 }
 
 exports.getPing = function(req, res) {
