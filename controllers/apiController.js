@@ -129,7 +129,7 @@ function parseJson(jsonString){
 }
 
 exports.getPing = function(req, res) {
-  res.send('Pong');
+  res.send('Poing');
 }
 
 exports.postPing = function(req, res) {
