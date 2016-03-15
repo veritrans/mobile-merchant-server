@@ -71,21 +71,21 @@ exports.registerCard = function(req, res) {
 
       if(success){
         if(!cardAlreadySaved){
-          res.json({"code": 201,"status": "Success","message": "Card is saved"});
+          res.json({"status_code": 201,"status_message": "Card is saved"});
         }else{
-          res.json({"code": 208,"status": "Success","message": "Card is already saved"});
+          res.json({"status_code": 208,"status_message": "Card is already saved"});
         }
       }else{
-        res.json({"code": 500,"status": "Server Error","message": "Internal Server Error"});
+        res.json({"status_code": 500,"status_message": "Internal Server Error"});
       }
     }else{
-      res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
+      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }
   }else{
     if(!token){
-      res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
+      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }else{
-      res.json({"code": 400,"status": "Bad Request","message": "status_code dari papi harus 200, harus ada saved_token_id, harus ada masked_card"});
+      res.json({"status_code": 400,"status_message": "status_code dari papi harus 200, harus ada saved_token_id, harus ada masked_card"});
     }
   }
 }
@@ -109,15 +109,15 @@ exports.getCards = function(req, res, next) {
         cardList = [];
       }
     }else{
-      res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
+      res.json({"code": 403,"status_message": "Invalid X-Auth token"});
     }
   }else{
-    res.json({"code": 403,"status": "Forbidden","message": "Invalid X-Auth token"});
+    res.json({"code": 403,"status_message": "Invalid X-Auth token"});
   }
 
   var response = {
-    'code' : 200,
-    'status' : 'success',
+    'status_code' : 200,
+    'status_message' : 'success',
     'data' : cardList
   }
   res.json(response);
@@ -141,7 +141,7 @@ exports.generateAuth = function(req, res) {
   if(success){
     res.json(response);
   }else{
-    res.json({"code": 500,"status": "Server Error","message": "Internal Server Error"});
+    res.json({"status_code": 500,"status_message": "Internal Server Error"});
   }
 
 }
