@@ -27,6 +27,61 @@ exports.doCharge = function(req, res, next) {
 
 }
 
+exports.deleteCard = function(req, res) {
+//   {
+//   "saved_token_id": "411111dae1ff06-cdd6-4ea0-af19-cd04b68ada21",
+// }
+  var token = req.headers['x-auth'];
+
+  if(req.body.saved_token_id && token){
+
+    var tokenList = getTokenList();
+    var isTokenValid = false;
+    for (var i = 0; i < tokenList.length; i++) {
+      if(tokenList[i] == token){
+        isTokenValid = true;
+        break;
+      }
+    }
+
+    if(isTokenValid){
+      var oldCardList = getSavedCards(token);
+      var newCardList = [];
+
+      var cardFound = false;
+      for (var i = 0; i < oldCardList.length; i++) {
+        if(oldCardList[i].saved_token_id == req.body.saved_token_id){
+          cardFound = true;
+        }else{
+          newCardList.push(oldCardList[i]);
+        }
+      }
+
+      if(cardFound){
+        var success = myCache.set(token, newCardList);
+        if(success){
+          res.json({"status_code": 204,"status_message": "Card is delted"});
+        }else{
+          res.json({"status_code": 500,"status_message": "Internal Server Error"});
+        }
+      }else{
+        res.json({"status_code": 404,"status_message": "Card is not found"});
+      }
+
+
+
+    }else{
+      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+    }
+  }else{
+    if(!token){
+      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+    }else{
+      res.json({"status_code": 400,"status_message": "Bad request, harus ada saved_token_id"});
+    }
+  }
+}
+
 exports.registerCard = function(req, res) {
 //   {
 //   "status_code": "200",
