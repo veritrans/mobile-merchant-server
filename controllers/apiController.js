@@ -58,7 +58,7 @@ exports.deleteCard = function(req, res) {
       if(cardFound){
         var success = myCache.set(token, newCardList);
         if(success){
-          res.status(204).json({"status_code": 204,"status_message": "Card is delted"});
+          res.status(200).json({"status_code": 200,"status_message": "Card is delted"});
         }else{
           res.status(500).json({"status_code": 500,"status_message": "Internal Server Error"});
         }
