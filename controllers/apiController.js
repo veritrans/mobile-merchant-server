@@ -58,24 +58,24 @@ exports.deleteCard = function(req, res) {
       if(cardFound){
         var success = myCache.set(token, newCardList);
         if(success){
-          res.json({"status_code": 204,"status_message": "Card is delted"});
+          res.status(204).json({"status_code": 204,"status_message": "Card is delted"});
         }else{
-          res.json({"status_code": 500,"status_message": "Internal Server Error"});
+          res.status(500).json({"status_code": 500,"status_message": "Internal Server Error"});
         }
       }else{
-        res.json({"status_code": 404,"status_message": "Card is not found"});
+        res.status(404).json({"status_code": 404,"status_message": "Card is not found"});
       }
 
 
 
     }else{
-      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+      res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }
   }else{
     if(!token){
-      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+      res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }else{
-      res.json({"status_code": 404,"status_message": "Card not found"});
+      res.status(404).json({"status_code": 404,"status_message": "Card not found"});
     }
   }
 }
@@ -124,21 +124,21 @@ exports.registerCard = function(req, res) {
 
       if(success){
         if(!cardAlreadySaved){
-          res.json({"status_code": 201,"status_message": "Card is saved"});
+          res.status(201).json({"status_code": 201,"status_message": "Card is saved"});
         }else{
-          res.json({"status_code": 208,"status_message": "Card is already saved"});
+          res.status(208).json({"status_code": 208,"status_message": "Card is already saved"});
         }
       }else{
-        res.json({"status_code": 500,"status_message": "Internal Server Error"});
+        res.status(500).json({"status_code": 500,"status_message": "Internal Server Error"});
       }
     }else{
-      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+      res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }
   }else{
     if(!token){
-      res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
+      res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }else{
-      res.json({"status_code": 400,"status_message": "status_code dari papi harus 200, harus ada saved_token_id, harus ada masked_card"});
+      res.status(400).json({"status_code": 400,"status_message": "status_code dari papi harus 200, harus ada saved_token_id, harus ada masked_card"});
     }
   }
 }
@@ -162,10 +162,10 @@ exports.getCards = function(req, res, next) {
         cardList = [];
       }
     }else{
-      res.json({"code": 403,"status_message": "Invalid X-Auth token"});
+      res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }
   }else{
-    res.json({"code": 403,"status_message": "Invalid X-Auth token"});
+    res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
   }
 
   var response = {
@@ -194,7 +194,7 @@ exports.generateAuth = function(req, res) {
   if(success){
     res.json(response);
   }else{
-    res.json({"status_code": 500,"status_message": "Internal Server Error"});
+    res.status(500).json({"status_code": 500,"status_message": "Internal Server Error"});
   }
 
 }
