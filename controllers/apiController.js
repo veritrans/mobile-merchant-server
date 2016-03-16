@@ -27,6 +27,17 @@ exports.doCharge = function(req, res, next) {
 
 }
 
+exports.checkauth = function(req,res) {
+  var token = req.headers['x-auth'];
+
+  if(checkTokenValidity(token)){
+    res.status(200).json({"status_code": 200,"status_message": "Token is valid"});
+  }else{
+    res.status(403).json({"status_code": 403,"status_message": "Token is invalid"});
+  }
+
+}
+
 exports.deleteCard = function(req, res) {
 //   "saved_token_id": "411111dae1ff06-cdd6-4ea0-af19-cd04b68ada21",
   var token = req.headers['x-auth'];
@@ -34,13 +45,7 @@ exports.deleteCard = function(req, res) {
   if(req.params.saved_token_id && token){
 
     var tokenList = getTokenList();
-    var isTokenValid = false;
-    for (var i = 0; i < tokenList.length; i++) {
-      if(tokenList[i] == token){
-        isTokenValid = true;
-        break;
-      }
-    }
+    var isTokenValid = checkTokenValidity(token);
 
     if(isTokenValid){
       var oldCardList = getSavedCards(token);
@@ -92,13 +97,7 @@ exports.registerCard = function(req, res) {
   if(req.body.status_code == 200 && req.body.saved_token_id && req.body.masked_card && token){
 
     var tokenList = getTokenList();
-    var isTokenValid = false;
-    for (var i = 0; i < tokenList.length; i++) {
-      if(tokenList[i] == token){
-        isTokenValid = true;
-        break;
-      }
-    }
+    var isTokenValid = checkTokenValidity(token);
 
     if(isTokenValid){
       var cardList = getSavedCards(token);
@@ -148,13 +147,7 @@ exports.getCards = function(req, res, next) {
   if(token){
 
     var tokenList = getTokenList();
-    var isTokenValid = false;
-    for (var i = 0; i < tokenList.length; i++) {
-      if(tokenList[i] == token){
-        isTokenValid = true;
-        break;
-      }
-    }
+    var isTokenValid = checkTokenValidity(token);
 
     if(isTokenValid){
       var cardList = getSavedCards(token);
@@ -202,7 +195,7 @@ exports.generateAuth = function(req, res) {
 function getTokenList(){
   value = myCache.get( 'tokenList' );
   if ( value == undefined ){
-    return false;
+    return [];
   }
   return value;
 }
@@ -231,6 +224,18 @@ function parseJson(jsonString){
        return false;
    }
    return retObj;
+}
+
+function checkTokenValidity(token){
+  var tokenList = getTokenList();
+  var isTokenValid = false;
+  for (var i = 0; i < tokenList.length; i++) {
+    if(tokenList[i] == token){
+      isTokenValid = true;
+      break;
+    }
+  }
+  return isTokenValid;
 }
 
 exports.getPing = function(req, res) {
