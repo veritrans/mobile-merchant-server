@@ -6,7 +6,7 @@ router.post('/charge', apiController.doCharge);
 
 router.get('/card', apiController.getCards);
 
-router.delete('/card', apiController.deleteCard)
+router.delete('/card/:saved_token_id', apiController.deleteCard)
 
 router.post('/card/register', apiController.registerCard);
 

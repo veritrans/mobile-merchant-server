@@ -28,12 +28,10 @@ exports.doCharge = function(req, res, next) {
 }
 
 exports.deleteCard = function(req, res) {
-//   {
 //   "saved_token_id": "411111dae1ff06-cdd6-4ea0-af19-cd04b68ada21",
-// }
   var token = req.headers['x-auth'];
 
-  if(req.body.saved_token_id && token){
+  if(req.params.saved_token_id && token){
 
     var tokenList = getTokenList();
     var isTokenValid = false;
@@ -50,7 +48,7 @@ exports.deleteCard = function(req, res) {
 
       var cardFound = false;
       for (var i = 0; i < oldCardList.length; i++) {
-        if(oldCardList[i].saved_token_id == req.body.saved_token_id){
+        if(oldCardList[i].saved_token_id == req.params.saved_token_id){
           cardFound = true;
         }else{
           newCardList.push(oldCardList[i]);
@@ -77,7 +75,7 @@ exports.deleteCard = function(req, res) {
     if(!token){
       res.json({"status_code": 403,"status_message": "Invalid X-Auth token"});
     }else{
-      res.json({"status_code": 400,"status_message": "Bad request, harus ada saved_token_id"});
+      res.json({"status_code": 404,"status_message": "Card not found"});
     }
   }
 }
