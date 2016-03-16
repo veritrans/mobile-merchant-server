@@ -6,6 +6,8 @@ router.post('/charge', apiController.doCharge);
 
 router.get('/card', apiController.getCards);
 
+router.delete('/card', apiController.deleteCard)
+
 router.post('/card/register', apiController.registerCard);
 
 router.post('/auth', apiController.generateAuth);
