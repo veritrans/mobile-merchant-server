@@ -9,7 +9,7 @@ exports.doCharge = function(req, res, next) {
   // console.log('Charging request', reqBody);
   // console.log("huba");
 
-  var chargeToken = 'Basic ' + new Buffer('VT-server-XKXAv5HUYS7SgG6C4Ty4mbog').toString('base64');
+  var chargeToken = 'Basic ' + new Buffer('VT-server-LOpE7O8_7niPnHylBjBz9x2x').toString('base64');
   var url = 'https://api.sandbox.veritrans.co.id/v2' + '/charge';
 
   request.post({
