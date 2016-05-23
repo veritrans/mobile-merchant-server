@@ -27,6 +27,30 @@ exports.doCharge = function(req, res, next) {
 
 }
 
+exports.doCharge = function(req, res, next) {
+  var reqBody = req.body;
+  // res.send(reqBody);
+  // console.log('Charging request', reqBody);
+  // console.log("huba");
+
+  var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97').toString('base64');
+  var url = 'https://api.sandbox.veritrans.co.id/v2' + '/charge';
+
+  request.post({
+    url: url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': chargeToken
+    },
+    body: JSON.stringify(reqBody)
+  }, function(err, response, body) {
+    var respObj = parseJson(body);
+    res.json(respObj);
+  });
+
+}
+
 exports.checkauth = function(req,res) {
   var token = req.headers['x-auth'];
 

@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRoutes);
 
+app.use('/api-prod', apiRoutesProd);
+
 app.use('/', indexRoutes);
 
 
