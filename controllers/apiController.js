@@ -184,7 +184,7 @@ exports.getCards = function(req, res, next) {
   }else{
     res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
   }
-
+ 
   var response = {
     'status_code' : 200,
     'status_message' : 'success',
