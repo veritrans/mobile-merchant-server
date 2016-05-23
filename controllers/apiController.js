@@ -27,7 +27,7 @@ exports.doCharge = function(req, res, next) {
 
 }
 
-exports.doCharge = function(req, res, next) {
+exports.doChargeProd = function(req, res, next) {
   var reqBody = req.body;
   // res.send(reqBody);
   // console.log('Charging request', reqBody);
