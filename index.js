@@ -2,6 +2,8 @@ var express = require('express');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var apiRoutes = require('./routes/apiRoutes');
+var apiRoutesProd = require('./routes/apiRoutesProd');
+
 var indexRoutes = require('./routes/indexRoutes');
 var app = express();
 
