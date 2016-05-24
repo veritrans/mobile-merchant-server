@@ -34,7 +34,7 @@ exports.doChargeProd = function(req, res, next) {
   // console.log("huba");
 
   var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97').toString('base64');
-  var url = 'https://api.sandbox.veritrans.co.id/v2' + '/charge';
+  var url = 'https://api.veritrans.co.id/v2' + '/charge';
 
   request.post({
     url: url,
@@ -184,7 +184,7 @@ exports.getCards = function(req, res, next) {
   }else{
     res.status(403).json({"status_code": 403,"status_message": "Invalid X-Auth token"});
   }
- 
+
   var response = {
     'status_code' : 200,
     'status_message' : 'success',
