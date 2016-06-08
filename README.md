@@ -19,6 +19,22 @@ There are several optional endpoint that can be implemented.
 
 Credit card one click and two click feature including save card and delete card.
 
+#### Get authentication token
+
+To enable save card on merchant server. Android client must be authenticated so we must use a `token` that will be used to **validate** and **differentiate** each user of the saved card.
+
+This `token` can be got from this endpoint and will be used later on another save card endpoint.
+
+`POST /auth` - used to get authentication to access the merchant token
+
+Example JSON response
+
+```json
+{
+  "X-Auth": "baf9ce634d2e65283cd1647bd082c8c2"
+}
+```
+
 #### Get Card List
 
 `GET /card` - used to get all saved card from specific user
@@ -93,18 +109,6 @@ Response:
 {
     "status_code": 200,
     "status_message": "Card is deleted"
-}
-```
-
-#### Get authentication token
-
-`POST /auth` - used to get authentication to access the merchant token
-
-Example JSON response
-
-```json
-{
-  "X-Auth": "baf9ce634d2e65283cd1647bd082c8c2"
 }
 ```
 
