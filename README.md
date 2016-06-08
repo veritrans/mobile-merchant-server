@@ -5,7 +5,11 @@ This is a testing server for the development of Veritran's IOs and Android SDK. 
 ## Required 
 There is only one endpoint from the merchant server that are required to use this SDK.
 
-1. `/charge` - used to do the charging of the transactions.
+`/charge` - used to do the charging of the transactions.
+
+This endpoint is just used to do the charging to Veritrans Payment API with added server key on the header.
+
+So the response is just the same as the payment response from Veritrans Payment API.
 
 ## Optional
 
