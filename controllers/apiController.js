@@ -9,8 +9,8 @@ exports.doCharge = function(req, res, next) {
   // console.log('Charging request', reqBody);
   // console.log("huba");
 
-  var chargeToken = 'Basic ' + new Buffer('VT-server-LOpE7O8_7niPnHylBjBz9x2x').toString('base64');
-  var url = 'https://api.sandbox.veritrans.co.id/v2' + '/charge';
+  var chargeToken = 'Basic ' + new Buffer('VT-server-LOpE7O8_7niPnHylBjBz9xxx:').toString('base64'); // Dummy Charge Token
+  var url = "https://app.sandbox.midtrans.com/snap/v1/transactions";
 
   request.post({
     url: url,
@@ -33,8 +33,8 @@ exports.doChargeProd = function(req, res, next) {
   // console.log('Charging request', reqBody);
   // console.log("huba");
 
-  var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97').toString('base64');
-  var url = 'https://api.veritrans.co.id/v2' + '/charge';
+  var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97:').toString('base64');
+  var url = 'https://app.midtrans.com/snap/v1/transactions';
 
   request.post({
     url: url,
