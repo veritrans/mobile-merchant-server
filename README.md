@@ -1,3 +1,7 @@
+##NOTE: THIS IS A SERVER REFERENCE FORTHE OLD MIDTRANS SDK. IF YOU'RE USING SDK VERSION 1.X.X, PLEASE REFER TO THE [NEW REPO](https://github.com/veritrans/veritrans-android/wiki/Implementation-for-Merchant-Server)
+
+
+
 # Merchant Server Reference implementation for mobile Apps
 
 This is a testing server for the development of Veritran's IOs and Android SDK. Also acts as a reference implementation for the methods to be implemented by merchants to use the mobile sdk
