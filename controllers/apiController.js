@@ -33,7 +33,7 @@ exports.doChargeProd = function(req, res, next) {
   // console.log('Charging request', reqBody);
   // console.log("huba");
 
-  var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97').toString('base64');
+  var chargeToken = 'Basic ' + new Buffer('b4fe7a0e-f784-4d75-8f9f-2556e9b37a97:').toString('base64');
   var url = 'https://app.midtrans.com/snap/v1/transactions';
 
   request.post({
